@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { Blog } = require("../models");
-const blogFinder = require("../util/middleware");
+const { blogFinder } = require("../util/middleware");
 
 router.get("/", async (req, res) => {
   const blogs = await Blog.findAll();
@@ -8,12 +8,8 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  try {
-    const blog = await Blog.create(req.body);
-    return res.json(blog);
-  } catch (error) {
-    return res.status(400).json({ error });
-  }
+  const blog = await Blog.create(req.body);
+  return res.json(blog);
 });
 
 router.get("/:id", blogFinder, async (req, res) => {
@@ -25,16 +21,13 @@ router.get("/:id", blogFinder, async (req, res) => {
 });
 
 router.delete("/:id", blogFinder, async (req, res) => {
-  try {
-    if (!req.blog) return res.status(404).json({ error: "Not found" });
+  if (req.blog) {
     await req.blog.destroy();
-    return res.status(200).json(req.blog);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Internal server error" });
+    res.status(200).json(req.blog);
+  } else {
+    res.status(404).end();
   }
 });
-
 router.put("/:id", blogFinder, async (req, res) => {
   if (req.blog) {
     req.blog.likes = req.body.likes;

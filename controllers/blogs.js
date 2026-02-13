@@ -34,14 +34,18 @@ blogsRouter.get("/:id", blogFinder, async (req, res) => {
   }
 });
 
-blogsRouter.delete("/:id", blogFinder, async (req, res) => {
-  if (req.blog) {
-    await req.blog.destroy();
-    res.status(200).json(req.blog);
-  } else {
-    res.status(404).end();
+blogsRouter.delete("/:id", blogFinder, tokenExtractor, async (req, res) => {
+  if (!req.blog) return res.status(404).end();
+
+  const user = await User.findByPk(req.decodedToken.id);
+  if (req.blog.userId !== user.id) {
+    return res.status(401).json({ error: "not allowed" });
   }
+
+  await req.blog.destroy();
+  return res.status(200).json(req.blog);
 });
+
 blogsRouter.put("/:id", blogFinder, async (req, res) => {
   if (req.blog) {
     req.blog.likes = req.body.likes;

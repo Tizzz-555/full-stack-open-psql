@@ -10,6 +10,7 @@ const blogFinder = async (req, res, next) => {
 blogsRouter.get("/", async (req, res) => {
   const blogs = await Blog.findAll({
     attributes: { exclude: ["userId"] },
+    //show users
     include: {
       model: User,
       attributes: ["name"],

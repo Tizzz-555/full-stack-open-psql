@@ -1,4 +1,3 @@
-// returns the number of blogs for each author and the total number of likes
 const authorsRouter = require("express").Router();
 const { Blog } = require("../models");
 const { sequelize } = require("../util/db");

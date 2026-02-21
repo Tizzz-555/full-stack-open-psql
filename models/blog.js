@@ -25,6 +25,17 @@ Blog.init(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    year: {
+      type: DataTypes.INTEGER,
+      validate: {
+        min: 1991,
+        isNotBiggerThanCurrentYear(value) {
+          if (value > new Date().getFullYear()) {
+            throw new Error("Year cannot be greater than the current year");
+          }
+        },
+      },
+    },
   },
   {
     sequelize,

@@ -27,6 +27,10 @@ const errorHandler = (error, req, res, next) => {
   if (error.name === "SequelizeUniqueConstraintError") {
     return res.status(400).json({ error: "unique constraint violated" });
   }
+
+  if (error.name === "SequelizeForeignKeyConstraintError") {
+    return res.status(400).json({ error: "invalid userId or blogId" });
+  }
   next(error);
 };
 

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "node --test --test-concurrency=1 tests/api_ch3.test.js",
     "dev": "nodemon index.js",
     "dev:debug": "node --inspect index.js",

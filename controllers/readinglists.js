@@ -3,8 +3,11 @@ const { ReadingList, User } = require("../models");
 const { tokenExtractor } = require("../util/middleware");
 
 readinglistsRouter.post("/", async (req, res) => {
-  const readingList = await ReadingList.create(req.body);
-  await readingList.save();
+  const { blogId, userId } = req.body;
+  const [readingList] = await ReadingList.findOrCreate({
+    where: { userId, blogId },
+    defaults: { userId, blogId },
+  });
   res.status(201).json(readingList);
 });
 
